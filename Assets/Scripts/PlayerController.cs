@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,17 +10,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator animator;
     private bool isGrounded;
     [SerializeField]private LayerMask groundLayer;
-    private float jumpForse = 7.0f;
+    private float jumpForse = 6.0f;
 
     private CameraController cam;
 
     private int _health = 3;
-    private bool doubleJump;
+    [HideInInspector] public bool doubleJump;
     private bool jumped = false;
+
+    [HideInInspector] public string nameScene;
 
     void Start()
     {
-        doubleJump = PlayerPrefs.GetInt("HasDoubleJump", 1) == 1;
+        nameScene = PlayerPrefs.GetString("NameScene", "StarterLvl");
+        doubleJump = PlayerPrefs.GetInt("HasDoubleJump", 0) == 1;
         cam = GameObject.Find("Main Camera").GetComponent<CameraController>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -59,10 +63,18 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForse);
             jumped = true;
         }
+
+        //Death
+        if(_health <= 0)
+        {
+            PlayerPrefs.DeleteAll();
+            SceneManager.LoadScene(nameScene);
+        }
     }
 
     public void Damage(int i)
     {
-        _health -= 0;
+        _health -= i;
+        Debug.Log(_health);
     }
 }
