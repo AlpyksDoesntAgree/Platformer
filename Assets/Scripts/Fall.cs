@@ -31,6 +31,7 @@ public class Fall : MonoBehaviour
     {
         playerRb.bodyType = RigidbodyType2D.Kinematic;
         playerRb.velocity = Vector3.zero;
+        playerController.isMovingEnabled=false;
 
         while (Vector3.Distance(player.position, checkPoint) > 1f)
         {

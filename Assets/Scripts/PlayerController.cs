@@ -6,10 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    [HideInInspector] public string nameScene;
     //UI
     [SerializeField] private GameObject heart;
     [SerializeField] private Transform playerUI;
     private int _health = 3;
+    private CameraController cam;
 
     //PlayerControl
     private Rigidbody2D rb;
@@ -18,14 +20,11 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     [SerializeField]private LayerMask groundLayer;
     private float jumpForse = 6.0f;
+    [HideInInspector] public bool isMovingEnabled = true;
 
-    private CameraController cam;
-
+    //DoubleJump
     [HideInInspector] public bool doubleJump;
     private bool jumped = false;
-
-    [HideInInspector] public string nameScene;
-    [HideInInspector] public bool isMovingEnabled = true;
 
     void Start()
     {

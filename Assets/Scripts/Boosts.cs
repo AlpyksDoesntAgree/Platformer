@@ -9,6 +9,7 @@ public class Boosts : MonoBehaviour
     public enum boostType
     {
         doubleJump,
+        score,
     }
     [SerializeField] private boostType type;
     void Start()
@@ -23,12 +24,17 @@ public class Boosts : MonoBehaviour
 
     public void GetBoost(boostType boost)
     {
-        switch(boost)
+        switch (boost)
         {
             case boostType.doubleJump:
                 player.doubleJump = true;
                 PlayerPrefs.SetInt("HasDoubleJump", 1);
                 PlayerPrefs.Save();
+                Destroy(gameObject);
+                break;
+            case boostType.score:
+                ScoreManager scoreManager = FindAnyObjectByType<ScoreManager>();
+                scoreManager.AddScore(50);
                 Destroy(gameObject);
                 break;
         }
