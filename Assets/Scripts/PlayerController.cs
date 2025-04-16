@@ -10,16 +10,21 @@ public class PlayerController : MonoBehaviour
     //UI
     [SerializeField] private GameObject heart;
     [SerializeField] private Transform playerUI;
-    private int _health = 3;
+    [HideInInspector] public int _health = 3;
     private CameraController cam;
 
     //PlayerControl
     private Rigidbody2D rb;
     private float speed = 5.0f;
     [SerializeField] private Animator animator;
+
+    //Jumps
     private bool isGrounded;
-    [SerializeField]private LayerMask groundLayer;
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Transform groundCheck;
+    private float groundCheckDistance = 0.1f;
     private float jumpForse = 6.0f;
+
     [HideInInspector] public bool isMovingEnabled = true;
 
     //DoubleJump
@@ -29,6 +34,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         updateUI();
+        _health = PlayerPrefs.GetInt("Health", 3);
         nameScene = PlayerPrefs.GetString("NameScene", "StarterLvl");
         doubleJump = PlayerPrefs.GetInt("HasDoubleJump", 0) == 1;
         cam = GameObject.Find("Main Camera").GetComponent<CameraController>();
@@ -47,7 +53,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //isGrounded
-        isGrounded = Physics2D.OverlapCircle(transform.position, 0.4f, groundLayer);
+        isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
 
         //Animation
         if (isGrounded)
@@ -66,11 +72,11 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForse);
+            Jump(jumpForse);
         }
         if (Input.GetKeyDown(KeyCode.W) && !isGrounded && doubleJump && !jumped)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForse);
+            Jump(jumpForse);
             jumped = true;
         }
 
@@ -82,6 +88,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Jump(float jumpForce)
+    {
+        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+    }
     public void Damage(int i)
     {
         _health -= i;

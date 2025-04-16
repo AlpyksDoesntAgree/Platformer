@@ -67,6 +67,15 @@ public class ScoreManager : MonoBehaviour
                 PlayerPrefs.SetInt("totalScore", totalScore);
                 PlayerPrefs.Save();
                 break;
+            case "secondScore":
+                secondScore += score;
+                currentScoreText.text = "Score: " + secondScore.ToString();
+                totalScore += score;
+                totalScoreText.text = "Total: " + totalScore.ToString();
+                PlayerPrefs.SetInt("secondScore", secondScore);
+                PlayerPrefs.SetInt("totalScore", totalScore);
+                PlayerPrefs.Save();
+                break;
         }
     }
     
@@ -75,9 +84,12 @@ public class ScoreManager : MonoBehaviour
         switch(currentScene)
         {
             case "StarterLvl":
-                Debug.Log("first Scene");
                 firstScore = PlayerPrefs.GetInt("firstScore", 0);
                 curScore = "firstScore";
+                break;
+            case "Underground":
+                secondScore = PlayerPrefs.GetInt("secondScore", 0);
+                curScore = "secondScore";
                 break;
         }
         return curScore;

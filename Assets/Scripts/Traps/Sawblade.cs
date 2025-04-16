@@ -25,6 +25,7 @@ public class Sawblade : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("isRight:" + movingRight);
         transform.Rotate(0,0, 280f * Time.deltaTime);
 
         if (block.position.x >= startPos.x + _distance)
@@ -38,7 +39,7 @@ public class Sawblade : MonoBehaviour
             block.position = Vector3.MoveTowards(block.position, new Vector3(startPos.x - _distance, startPos.y, startPos.z), _speed);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
             playerCon.Damage(1);

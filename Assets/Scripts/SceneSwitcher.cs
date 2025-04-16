@@ -42,6 +42,8 @@ public class SceneSwitcher : MonoBehaviour
                     }
                     break;
             }
+            PlayerPrefs.SetInt("Health", playerCon._health);
+            PlayerPrefs.Save();
         }
     }
 
