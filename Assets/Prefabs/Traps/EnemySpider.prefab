@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 1164656818292296393}
   - component: {fileID: 7181168859725899520}
   - component: {fileID: 8179962081590058769}
+  - component: {fileID: 686443465016134193}
   m_Layer: 0
   m_Name: EnemySpider
   m_TagString: Untagged
@@ -170,7 +171,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0008882582, y: 0.000000078231096}
@@ -207,6 +208,33 @@ MonoBehaviour:
   anim: {fileID: 2577538299940388426}
   upsideRayCast: {fileID: 1007070451225973147}
   isGroundRayCast: {fileID: 555736455246643649}
+--- !u!50 &686443465016134193
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7046899060010183660}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &7684822974490996523
 GameObject:
   m_ObjectHideFlags: 0

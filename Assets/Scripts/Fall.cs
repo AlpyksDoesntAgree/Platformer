@@ -7,6 +7,7 @@ public class Fall : MonoBehaviour
 {
     private Transform player;
     private Rigidbody2D playerRb;
+    private Collider2D playerCollider;
     private PlayerController playerController;
     private bool damaged = false;
     [SerializeField] private Vector3 checkPoint;
@@ -17,6 +18,7 @@ public class Fall : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<Transform>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         playerRb = GameObject.Find("Player").GetComponent<Rigidbody2D>();
+        playerCollider = GameObject.Find("Player").GetComponent<Collider2D>();
     }
     void Update()
     {
@@ -31,6 +33,7 @@ public class Fall : MonoBehaviour
     {
         playerRb.bodyType = RigidbodyType2D.Kinematic;
         playerRb.velocity = Vector3.zero;
+        playerCollider.enabled = false;
         playerController.isMovingEnabled=false;
 
         while (Vector3.Distance(player.position, checkPoint) > 1f)
@@ -46,6 +49,7 @@ public class Fall : MonoBehaviour
             playerRb.bodyType = RigidbodyType2D.Dynamic;
 
             yield return new WaitForSeconds(0.5f);
+            playerCollider.enabled = true;
             damaged = !damaged;
         }
     }

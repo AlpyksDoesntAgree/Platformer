@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8739448089071988341}
   - component: {fileID: 9070784352384876411}
+  - component: {fileID: 7094848971771231592}
   m_Layer: 0
   m_Name: Door
   m_TagString: door
@@ -162,3 +163,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.9024009, y: 2.705538}
   m_EdgeRadius: 0
+--- !u!114 &7094848971771231592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8852704772546598866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11051c5c87b26a409dcfcd874955213, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nameScene: SecondStage
+  _speed: 0

@@ -37,7 +37,7 @@ public class EnemyBehaviour : MonoBehaviour
         else { transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); }
 
         //isPlayerUpside
-        isPlayerUpside = Physics2D.Raycast(upsideRayCast.position, Vector2.up, 0.1f, playerLayer);
+        isPlayerUpside = Physics2D.Raycast(upsideRayCast.position, Vector2.up, 0.15f, playerLayer);
         if (isPlayerUpside) { Destroy(gameObject); }
 
         //isGrounded
@@ -56,8 +56,9 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else { anim.SetBool("isWalking", false); }
     }
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
-        playerController.Damage(1);
+        if(other.gameObject.CompareTag("Player"))
+            playerController.Damage(1);
     }
 }

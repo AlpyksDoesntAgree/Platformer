@@ -31,26 +31,28 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool doubleJump;
     private bool jumped = false;
 
+    //Damage
+    [HideInInspector] public bool damaged = false;
+
     void Start()
     {
-        updateUI();
         _health = PlayerPrefs.GetInt("Health", 3);
         nameScene = PlayerPrefs.GetString("NameScene", "StarterLvl");
         doubleJump = PlayerPrefs.GetInt("HasDoubleJump", 0) == 1;
         cam = GameObject.Find("Main Camera").GetComponent<CameraController>();
         rb = GetComponent<Rigidbody2D>();
+        updateUI();
     }
     void Update()
     {
         //Moving
         float move = Input.GetAxisRaw("Horizontal");
-        rb.velocity = new Vector2(move * speed, rb.velocity.y);
-
         if (isMovingEnabled)
-        {
-            if (move > 0) { transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); cam.offset = new Vector3(-0.1f, 0, 0); }
-            if (move < 0) { transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); cam.offset = new Vector3(0.1f, 0, 0); }
-        }
+            rb.velocity = new Vector2(move * speed, rb.velocity.y);
+
+        if (move > 0) { transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); cam.offset = new Vector3(-0.1f, 0, 0); }
+        if (move < 0) { transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); cam.offset = new Vector3(0.1f, 0, 0); }
+
 
         //isGrounded
         isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
@@ -68,7 +70,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Jump and double jump
-        if (isGrounded)  { jumped = false; }
+        if (isGrounded) { jumped = false; }
 
         if (Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
@@ -81,10 +83,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //Death
-        if(_health <= 0)
+        if (_health <= 0)
         {
             PlayerPrefs.DeleteAll();
-            SceneManager.LoadScene(nameScene);
+            SceneManager.LoadScene("StarterLvl");
         }
     }
 
@@ -92,10 +94,20 @@ public class PlayerController : MonoBehaviour
     {
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
-    public void Damage(int i)
+    public void FallDamage(int i)
     {
         _health -= i;
         updateUI();
+    }
+
+    public void Damage(int i)
+    {
+        if (!damaged)
+        {
+            _health -= i;
+            updateUI();
+            Start
+        }
     }
     private void updateUI()
     {
@@ -108,5 +120,12 @@ public class PlayerController : MonoBehaviour
         {
             Instantiate(heart, new Vector3(playerUI.position.x + 1.15f * i, playerUI.position.y), Quaternion.identity, playerUI);
         }
+    }
+
+    IEnumerator WaitDamaged()
+    {
+        damaged = !damaged;
+        yield return new WaitForSeconds(0.5f);
+        damaged = !damaged;
     }
 }
