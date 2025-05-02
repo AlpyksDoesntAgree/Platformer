@@ -38,7 +38,15 @@ public class EnemyBehaviour : MonoBehaviour
 
         //isPlayerUpside
         isPlayerUpside = Physics2D.Raycast(upsideRayCast.position, Vector2.up, 0.15f, playerLayer);
-        if (isPlayerUpside) { Destroy(gameObject); }
+        if (isPlayerUpside) 
+        { 
+            Destroy(gameObject);
+            if (PlayerPrefs.GetInt("HasHeal", 0) == 1 && playerController._health < 3)
+            {
+                playerController._health++;
+                playerController.updateUI();
+            }
+        }
 
         //isGrounded
         isGrounded = Physics2D.Raycast(isGroundRayCast.position, Vector2.down, Mathf.Infinity, groundMask);

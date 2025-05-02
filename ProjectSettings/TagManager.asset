@@ -6,6 +6,10 @@ TagManager:
   tags:
   - pipe
   - door
+  - trap
+  - block
+  - bird
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -15,8 +19,8 @@ TagManager:
   - UI
   - groundLayer
   - playerLayer
-  - 
-  - 
+  - ignoreLayer
+  - Bird
   - 
   - 
   - 

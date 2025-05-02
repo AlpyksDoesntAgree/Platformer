@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 7641828922590394003}
   m_Layer: 0
   m_Name: SwingingAxe
-  m_TagString: Untagged
+  m_TagString: trap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

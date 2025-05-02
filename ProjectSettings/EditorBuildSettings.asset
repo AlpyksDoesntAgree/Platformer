@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3b26120b4e54f8547acf13177645b8ff
+  - enabled: 1
     path: Assets/Scenes/StarterLvl.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
@@ -14,4 +17,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SecondStage.unity
     guid: 158c2fb3330f7e94f82b4c4bbf6d31d5
+  - enabled: 1
+    path: Assets/Scenes/Arena.unity
+    guid: 6ba0dec118aae8d48aaff2961d065a81
+  - enabled: 1
+    path: Assets/Scenes/Parkour.unity
+    guid: adab0b19466cf8c49a25ee3e65bd7527
+  - enabled: 1
+    path: Assets/Scenes/FinalStage.unity
+    guid: a7258b9d671875f4c920abf7e73d7530
   m_configObjects: {}

@@ -25,7 +25,6 @@ public class Sawblade : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("isRight:" + movingRight);
         transform.Rotate(0,0, 280f * Time.deltaTime);
 
         if (block.position.x >= startPos.x + _distance)

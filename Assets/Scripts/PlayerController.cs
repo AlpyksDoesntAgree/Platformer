@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,9 +12,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject heart;
     [SerializeField] private Transform playerUI;
     [HideInInspector] public int _health = 3;
+    private LosePanel LosePanel;
     private CameraController cam;
 
     //PlayerControl
+    private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
     private float speed = 5.0f;
     [SerializeField] private Animator animator;
@@ -34,14 +37,19 @@ public class PlayerController : MonoBehaviour
     //Damage
     [HideInInspector] public bool damaged = false;
 
+    private bool isStepped = false;
+
     void Start()
     {
+        LosePanel = GameObject.Find("LosePanel").GetComponent<LosePanel>();
         _health = PlayerPrefs.GetInt("Health", 3);
         nameScene = PlayerPrefs.GetString("NameScene", "StarterLvl");
         doubleJump = PlayerPrefs.GetInt("HasDoubleJump", 0) == 1;
         cam = GameObject.Find("Main Camera").GetComponent<CameraController>();
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         updateUI();
+        AudioController.Instance.PlayMusic();
     }
     void Update()
     {
@@ -62,6 +70,8 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isJumping", false);
             animator.SetBool("isRunning", move != 0);
+            if(!isStepped && move != 0)
+            StartCoroutine(PlayStepWithPause());
         }
         else
         {
@@ -72,44 +82,49 @@ public class PlayerController : MonoBehaviour
         //Jump and double jump
         if (isGrounded) { jumped = false; }
 
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        if (isMovingEnabled)
         {
-            Jump(jumpForse);
+            if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+            {
+                Jump(jumpForse);
+            }
+            if (Input.GetKeyDown(KeyCode.W) && !isGrounded && doubleJump && !jumped)
+            {
+                Jump(jumpForse);
+                jumped = true;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.W) && !isGrounded && doubleJump && !jumped)
-        {
-            Jump(jumpForse);
-            jumped = true;
-        }
-
         //Death
         if (_health <= 0)
         {
             PlayerPrefs.DeleteAll();
-            SceneManager.LoadScene("StarterLvl");
+            LosePanel.LoseGame();
+            damaged = true;
+            spriteRenderer.color = new Color(1, 1, 1, 0.5f);
         }
     }
-
     public void Jump(float jumpForce)
     {
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        AudioController.Instance.PlaySound(1);
     }
     public void FallDamage(int i)
     {
         _health -= i;
+        AudioController.Instance.PlaySound(3);
         updateUI();
     }
-
     public void Damage(int i)
     {
         if (!damaged)
         {
             _health -= i;
+            AudioController.Instance.PlaySound(3);
             updateUI();
-            Start
+            StartCoroutine(WaitDamaged());
         }
     }
-    private void updateUI()
+    public void updateUI()
     {
         foreach (Transform child in playerUI.transform)
         {
@@ -121,11 +136,20 @@ public class PlayerController : MonoBehaviour
             Instantiate(heart, new Vector3(playerUI.position.x + 1.15f * i, playerUI.position.y), Quaternion.identity, playerUI);
         }
     }
-
     IEnumerator WaitDamaged()
     {
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
         damaged = !damaged;
+        yield return new WaitForSeconds(1.5f);
+        spriteRenderer.color = new Color(1, 1, 1, 1);
+        damaged = !damaged;
+    }
+    IEnumerator PlayStepWithPause()
+    {
+        isStepped = true;
+        AudioController.Instance.PlaySound(2);
+        animator.SetBool("isRunning", true);
         yield return new WaitForSeconds(0.5f);
-        damaged = !damaged;
+        isStepped = false;
     }
 }

@@ -23,7 +23,6 @@ public class ScoreManager : MonoBehaviour
     private int firstScore;
     private int secondScore;
     private int thirdScore;
-    private int fourthScore;
     private int totalScore;
 
     private string curScore;
@@ -76,6 +75,15 @@ public class ScoreManager : MonoBehaviour
                 PlayerPrefs.SetInt("totalScore", totalScore);
                 PlayerPrefs.Save();
                 break;
+            case "thirdScore":
+                thirdScore += score;
+                currentScoreText.text = "Score: " + thirdScore.ToString();
+                totalScore += score;
+                totalScoreText.text = "Total: " + totalScore.ToString();
+                PlayerPrefs.SetInt("thirdScore", thirdScore);
+                PlayerPrefs.SetInt("totalScore", totalScore);
+                PlayerPrefs.Save();
+                break;
         }
     }
     
@@ -90,6 +98,10 @@ public class ScoreManager : MonoBehaviour
             case "Underground":
                 secondScore = PlayerPrefs.GetInt("secondScore", 0);
                 curScore = "secondScore";
+                break;
+            case "ThirdLevel":
+                secondScore = PlayerPrefs.GetInt("secondScore", 0);
+                curScore = "thirdScore";
                 break;
         }
         return curScore;
