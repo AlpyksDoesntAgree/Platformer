@@ -5,11 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
     public void ExitGame()
     {
         Application.Quit();
@@ -26,4 +21,8 @@ public class ButtonManager : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
 
+    public void LoadScene(string SceneName)
+    {
+        SceneManager.LoadScene(SceneName);
+    }
 }
