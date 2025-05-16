@@ -1463,6 +1463,10 @@ MonoBehaviour:
   nameField: {fileID: 0}
   passField: {fileID: 0}
   repeatPassField: {fileID: 0}
+  _chatMessageInput: {fileID: 0}
+  _sendButton: {fileID: 0}
+  _chatText: {fileID: 0}
+  _scrollRect: {fileID: 0}
 --- !u!4 &1568916228
 Transform:
   m_ObjectHideFlags: 0
