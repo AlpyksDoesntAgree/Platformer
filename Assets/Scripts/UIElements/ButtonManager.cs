@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class ButtonManager : MonoBehaviour
 {
+    [SerializeField] private Animator animator;
     public void ExitGame()
     {
         Application.Quit();
@@ -24,5 +25,16 @@ public class ButtonManager : MonoBehaviour
     public void LoadScene(string SceneName)
     {
         SceneManager.LoadScene(SceneName);
+    }
+
+    public void OpenChatAnimation()
+    {
+        animator.SetFloat("Mult", 1f);
+        animator.Play("OpenChat");
+    }
+    public void CloseChatAnimation()
+    {
+        animator.SetFloat("Mult", -1f);
+        animator.Play("OpenChat");
     }
 }

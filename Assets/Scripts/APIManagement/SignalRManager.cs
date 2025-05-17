@@ -1,55 +1,66 @@
+п»їusing Microsoft.AspNetCore.SignalR.Client;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
-using Cysharp.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Client;
 
 public class SignalRManager : MonoBehaviour
 {
-    [SerializeField] private float connectionDelay = 1f; // Задержка между попытками подключения
+    private HubConnection _connection;
 
-    public async UniTask<HubConnection> ConnectToHubAsync()
+    public static SignalRManager Instance { get; private set; }
+
+    public event Action<string, string> OnMessageReceived;
+
+    async void Start()
     {
-        Debug.Log("ConnectToHubAsync start");
+        Instance = this;
 
-        // Создаем соединение с нашим написанным тестовым хабом
-        var connection = new HubConnectionBuilder()
+        _connection = new HubConnectionBuilder()
             .WithUrl("http://localhost:5039/NotificationHub")
             .WithAutomaticReconnect()
             .Build();
 
-        Debug.Log("connection handle created");
+        _connection.On<string, string>("OnMessageReceived", (user, message) =>
+        {
+            Debug.Log($"[{user}]: {message}");
+            OnMessageReceived?.Invoke(user, message); 
+        });
 
-        // Подписываемся на сообщение от хаба, чтобы проверить подключение
-        connection.On<string, string>("ReceiveMessage",
-            (user, message) => LogAsync($"{user}: {message}").Forget());
+        try
+        {
+            await _connection.StartAsync();
+            Debug.Log("SignalR РїРѕРґРєР»СЋС‡РµРЅРёРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ.");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"РћС€РёР±РєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ: {ex.Message}");
+        }
+    }
 
-        while (connection.State != HubConnectionState.Connected)
+    public async void SendMessage(string user, string message)
+    {
+        if (_connection.State == HubConnectionState.Connected)
         {
             try
             {
-                if (connection.State == HubConnectionState.Connecting)
-                {
-                    await UniTask.Delay(TimeSpan.FromSeconds(connectionDelay));
-                    continue;
-                }
-
-                Debug.Log("start connection");
-                await connection.StartAsync();
-                Debug.Log("connection finished");
+                await _connection.InvokeAsync("BroadcastMessage", user, message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.LogException(e);
+                Debug.LogError($"РћС€РёР±РєР° РѕС‚РїСЂР°РІРєРё СЃРѕРѕР±С‰РµРЅРёСЏ: {ex.Message}");
             }
         }
-        return connection;
+        else
+        {
+            Debug.LogWarning("РќРµС‚ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє SignalR.");
+        }
     }
 
-    // Метод для логирования сообщений (можно заменить на свой)
-    private async UniTask LogAsync(string message)
+    private async void OnApplicationQuit()
     {
-        await UniTask.SwitchToMainThread(); // Если нужно выполнить в основном потоке Unity
-        Debug.Log(message);
+        if (_connection != null)
+        {
+            await _connection.StopAsync();
+            await _connection.DisposeAsync();
+        }
     }
 }
