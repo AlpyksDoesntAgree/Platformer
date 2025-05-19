@@ -5,7 +5,6 @@ using UnityEngine;
 public class SignalRManager : MonoBehaviour
 {
     private HubConnection _connection;
-
     public static SignalRManager Instance { get; private set; }
 
     public event Action<string, string> OnMessageReceived;

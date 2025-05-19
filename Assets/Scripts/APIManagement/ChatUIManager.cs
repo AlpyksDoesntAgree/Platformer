@@ -7,8 +7,8 @@ public class ChatUIManager : MonoBehaviour
 {
     [SerializeField] private InputField messageInput;
     [SerializeField] private Button sendButton;
-    [SerializeField] private Text chatDisplay;
     private SignalRManager chatClient;
+    [SerializeField] private ChatScroll chatScroll;
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class ChatUIManager : MonoBehaviour
 
     private void OnMessageReceived(string user, string message)
     {
-        chatDisplay.text += $"\n{user}: {message}";
+        chatScroll.AddMessage(user, message);
     }
 
     private void OnDestroy()
